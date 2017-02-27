@@ -4,10 +4,17 @@
   "description": "stochastic ping bootstrap function for xyz",
   "main": "ping.stochastic.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/mocha --reporter spec",
+    "lintit": "standard './ping.stochastic.js' --fix"
   },
   "dependencies": {
       "xyz-core": "latest"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.5.3",
+    "xyz-cli": "^0.3.1",
+    "xyz-core": "^0.3.1"
   },
   "author": "kian.peymani@gmail.com",
   "license": "ISC"
