@@ -1,0 +1,14 @@
+{
+  "name": "xyz.ping.stochastic.bootstrap",
+  "version": "0.1.0",
+  "description": "stochastic ping bootstrap function for xyz",
+  "main": "ping.stochastic.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+      "xyz-core": "latest"
+  },
+  "author": "kian.peymani@gmail.com",
+  "license": "ISC"
+}
