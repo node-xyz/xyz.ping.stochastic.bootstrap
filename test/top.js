@@ -1,8 +1,10 @@
-describe.skip('basic', function () {
-  // require('./tests/basic.js')
+describe('basic', function () {
+  require('./tests/basic.js')
 })
 
-describe('discovery', function () {
+describe('no join', function () {
+  require('./tests/basic.without.join')
+})
+describe('join', function () {
   require('./tests/basic.with.join')
-  // require('./tests/basic.without.join')
 })

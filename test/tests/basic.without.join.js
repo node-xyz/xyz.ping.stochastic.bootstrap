@@ -5,9 +5,9 @@ const _send = test.sendMessage
 let processes
 let identifiers = []
 let TESTER
-const TOTAL = 2
+const TOTAL = 2 + 1 // + tester node
 before(function (done) {
-  this.timeout(15000)
+  this.timeout(40 * 1000)
   test.setUpTestEnv((p) => {
     processes = p
     identifiers = Object.keys(processes)
@@ -19,17 +19,31 @@ before(function (done) {
 it('initial state', function (done) {
   _send('inspectJSON', processes[identifiers[0]], (data) => {
     expect(data.global.systemConf.nodes.length).to.equal(TOTAL)
-    expect(Object.keys(data.ServiceRepository.foreignServices).length).to.equal(TOTAL)
+    expect(Object.keys(data.ServiceRepository.foreignServices)).to.have.lengthOf(TOTAL)
     _send('inspectJSON', processes[identifiers[1]], (data) => {
-      expect(Object.keys(data.ServiceRepository.foreignServices).length).to.equal(TOTAL)
-      expect(data.global.systemConf.nodes.length).to.equal(TOTAL)
+      expect(Object.keys(data.ServiceRepository.foreignServices)).to.have.lengthOf(TOTAL)
+      expect(data.global.systemConf.nodes).to.have.lengthOf(TOTAL)
       done()
     })
   })
 })
 
-it.skip('delete one of them', function (done) {
-  done()
+it('remove one of them', function (done) {
+  this.timeout(60 * 1000)
+  TESTER.call({
+    servicePath: 'node/kill',
+    payload: `0`
+  }, (err, body, resp) => {
+    expect(body).to.equal('Done')
+    setTimeout(() => {
+      _send('inspectJSON', processes[identifiers[1]], (data) => {
+        console.log(data.global.systemConf)
+        expect(data.global.systemConf.nodes).to.have.lengthOf(TOTAL - 1)
+        expect(Object.keys(data.ServiceRepository.foreignServices)).to.have.lengthOf(TOTAL - 1)
+        done()
+      })
+    }, 50 * 1000)
+  })
 })
 
 after(function () {

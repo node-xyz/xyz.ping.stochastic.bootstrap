@@ -21,15 +21,15 @@ before(function (done) {
 it('initial state', function (done) {
   _send('inspectJSON', processes[identifiers[0]], (data) => {
     expect(data.global.systemConf.nodes.length).to.equal(TOTAL)
-    expect(Object.keys(data.ServiceRepository.foreignServices).length).to.equal(TOTAL)
+    expect(Object.keys(data.ServiceRepository.foreignServices)).to.have.lengthOf(TOTAL)
     _send('inspectJSON', processes[identifiers[1]], (data) => {
-      expect(Object.keys(data.ServiceRepository.foreignServices).length).to.equal(TOTAL)
+      expect(Object.keys(data.ServiceRepository.foreignServices)).to.have.lengthOf(TOTAL)
       expect(data.global.systemConf.nodes.length).to.equal(TOTAL)
       _send('inspectJSON', processes[identifiers[2]], (data) => {
-        expect(Object.keys(data.ServiceRepository.foreignServices).length).to.equal(TOTAL)
+        expect(Object.keys(data.ServiceRepository.foreignServices)).to.have.lengthOf(TOTAL)
         expect(data.global.systemConf.nodes.length).to.equal(TOTAL)
         _send('inspectJSON', processes[identifiers[3]], (data) => {
-          expect(Object.keys(data.ServiceRepository.foreignServices).length).to.equal(TOTAL)
+          expect(Object.keys(data.ServiceRepository.foreignServices)).to.have.lengthOf(TOTAL)
           expect(data.global.systemConf.nodes.length).to.equal(TOTAL)
           done()
         })
@@ -39,7 +39,7 @@ it('initial state', function (done) {
 })
 
 it('add a new one on the fly', function (done) {
-  this.timeout(10000)
+  this.timeout(30 * 1000)
   TESTER.call({
     servicePath: '/node/create',
     payload: {
@@ -50,29 +50,29 @@ it('add a new one on the fly', function (done) {
     expect(body).to.equal('Done')
     setTimeout(() => {
       _send('inspectJSON', processes[identifiers[0]], (data) => {
-        expect(data.global.systemConf.nodes.length).to.equal(TOTAL + 1)
-        expect(Object.keys(data.ServiceRepository.foreignServices).length).to.equal(TOTAL + 1)
+        expect(data.global.systemConf.nodes).to.have.lengthOf(TOTAL + 1)
+        expect(Object.keys(data.ServiceRepository.foreignServices)).to.have.lengthOf(TOTAL + 1)
         _send('inspectJSON', processes[identifiers[1]], (data) => {
-          expect(Object.keys(data.ServiceRepository.foreignServices).length).to.equal(TOTAL + 1)
-          expect(data.global.systemConf.nodes.length).to.equal(TOTAL + 1)
+          expect(Object.keys(data.ServiceRepository.foreignServices)).to.have.lengthOf(TOTAL + 1)
+          expect(data.global.systemConf.nodes).to.have.lengthOf(TOTAL + 1)
           _send('inspectJSON', processes[identifiers[2]], (data) => {
-            expect(Object.keys(data.ServiceRepository.foreignServices).length).to.equal(TOTAL + 1)
-            expect(data.global.systemConf.nodes.length).to.equal(TOTAL + 1)
+            expect(Object.keys(data.ServiceRepository.foreignServices)).to.have.lengthOf(TOTAL + 1)
+            expect(data.global.systemConf.nodes).to.have.lengthOf(TOTAL + 1)
             _send('inspectJSON', processes[identifiers[3]], (data) => {
-              expect(Object.keys(data.ServiceRepository.foreignServices).length).to.equal(TOTAL + 1)
-              expect(data.global.systemConf.nodes.length).to.equal(TOTAL + 1)
+              expect(Object.keys(data.ServiceRepository.foreignServices)).to.have.lengthOf(TOTAL + 1)
+              expect(data.global.systemConf.nodes).to.have.lengthOf(TOTAL + 1)
               TESTER.call({
                 servicePath: 'node/inspectJSON', payload: 'string.ms@127.0.0.1:5050'
               }, (err, body, resp) => {
-                expect(Object.keys(body.ServiceRepository.foreignServices).length).to.equal(TOTAL + 1)
-                expect(body.global.systemConf.nodes.length).to.equal(TOTAL + 1)
+                expect(Object.keys(body.ServiceRepository.foreignServices)).to.have.lengthOf(TOTAL + 1)
+                expect(body.global.systemConf.nodes).to.have.lengthOf(TOTAL + 1)
                 done()
               })
             })
           })
         })
       })
-    }, 6000)
+    }, 25 * 1000)
   })
 })
 
