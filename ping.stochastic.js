@@ -25,9 +25,27 @@ let stochasticPingBoostraper = (xyz, event, port) => {
   let wrapper = xyz.Util.wrapper
 
   let SR = xyz.serviceRepository
+  let transport = SR.transport
   const _id = `${xyz.id().host}:${xyz.id().port}`
 
   let joinCandidate = []
+
+  let seeds = CONFIG.getSelfConf().seed
+  function contactSeed (idx) {
+    transport.send({node: seeds[idx], payload: {id: _id}, route: 'PING'}, (err, body, res) => {
+      if (!err) {
+        logger.info(`${wrapper('bold', 'JOIN PING ACCEPTED')}. response : ${JSON.stringify(body)}`)
+        for (let node of body.nodes) {
+          SR.joinNode(node)
+        }
+        // no need to do this. guess why :D
+        // this.joinNode(seeds[idx])
+      } else {
+        logger.error(`${wrapper('bold', 'JOIN PING REJECTED')} :: seed node ${seeds[idx]} rejected with `)
+        setTimeout(() => contactSeed(idx === seeds.length - 1 ? 0 : ++idx), interval + Util.Random(threshold))
+      }
+    })
+  }
 
   function _ping () {
     let nodes = CONFIG.getSystemConf().nodes
@@ -77,7 +95,7 @@ let stochasticPingBoostraper = (xyz, event, port) => {
                 } else {
                 // note that we do not use the body (services) here.
                 // we wait until the next ping round for double check
-                  CONFIG.joinNode(__node)
+                  SR.joinNode(__node)
                 }
                 joinCandidate.splice(joinCandidate.indexOf(__node))
               }.bind(null, cNode))
@@ -136,6 +154,10 @@ let stochasticPingBoostraper = (xyz, event, port) => {
   }
 
   _ping()
+
+  if (seeds.length) {
+    contactSeed(0)
+  }
 }
 
 module.exports = stochasticPingBoostraper

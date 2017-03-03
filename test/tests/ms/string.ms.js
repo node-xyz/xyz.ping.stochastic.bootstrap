@@ -23,4 +23,4 @@ setInterval(() => {
   stringMs.call({servicePath: '/math/decimal/mul', payload: {x: 2, y: 3}}, (err, body, res) => {
     console.log(err, body)
   })
-}, 100)
+}, 3000)
