@@ -94,7 +94,10 @@ let stochasticPingBoostraper = (xyz, event, port) => {
       joinCandidate.push(body.id)
     }
     logger.debug(`Responding a PING message from ${body.id}`)
-    response.end(JSON.stringify({services: SR.services.serializedTree, nodes: CONFIG.getSystemConf().nodes}))
+    response.end(JSON.stringify({
+      services: SR.services.serializedTree,
+      nodes: CONFIG.getSystemConf().nodes,
+      transportServers: SR.transport.getServerRoutes()}))
   }
 
   function _pingEvent (params, next, end, xyz) {

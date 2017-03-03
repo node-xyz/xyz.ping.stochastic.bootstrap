@@ -7,6 +7,7 @@ let identifiers = []
 let TESTER
 let lastValue
 before(function (done) {
+  this.timeout(3000)
   test.setUpTestEnv((p) => {
     processes = p
     identifiers = Object.keys(processes)
@@ -38,7 +39,7 @@ it('interval should increase when a node goes down', function (done) {
     expect(body).to.equal('Done')
     setTimeout(() => {
       _send('pingRate', processes[identifiers[0]], (data) => {
-        expect(data.interval).to.be.below(lastValue+1)
+        expect(data.interval).to.be.below(lastValue + 1)
         done()
       })
     }, 10000)
