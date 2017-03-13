@@ -25,6 +25,7 @@ let stochasticPingBoostraper = (xyz, event, port) => {
   let wrapper = xyz.Util.wrapper
 
   let SR = xyz.serviceRepository
+  SR.outOfReachNodes = {}
   let transport = SR.transport
   const _id = `${xyz.id().host}:${xyz.id().port}`
 
