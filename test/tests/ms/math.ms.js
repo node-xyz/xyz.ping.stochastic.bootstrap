@@ -23,4 +23,4 @@ setInterval(() => {
   mathMs.call({servicePath: '/string/up', payload: 'hello'}, (err, body, response) => {
     console.log(err, body)
   })
-}, 2000)
+}, 10000)
