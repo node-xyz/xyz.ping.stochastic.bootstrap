@@ -108,3 +108,19 @@ where the the second parameter, options can have:
 | minInterval | 2500            |      min interval      |
 | routePrefix | PING            |      route to use in both client and server       |
 | kick        | 5               |      threshold to kick nodes       |
+
+> Note that if **routePrefix** is set to its default value, since it is the same as the route of **Default Ping**, this one node using this ping can cooperate with another node using **Default Ping**.
+
+### Cli Integration
+
+If you set `event: true`, a new message event will be bound to the process using this ping to fetch and monitor the rate of ping intervals. This event can be used by `xyz-cli`. As an example, if you clone this repo and run `xyz-cli` with `xyztestrc.json` in the root folder:
+
+```
+xyz dev -c ./xyztestrc.json
+```
+
+and use the `top` command:
+
+![](https://github.com/node-xyz/xyz.ping.stochastic.bootstrap/blob/master/media/ex1.png?raw=true)
+
+As you see, the ping intervals of each node is shown and will be updated lively.
