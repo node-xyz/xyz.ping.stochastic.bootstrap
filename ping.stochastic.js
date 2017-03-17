@@ -4,16 +4,19 @@ let maxInterval
 let mean
 let threshold = 2000
 let kick
+let logger
 const GenericMiddlewareHandler = require('xyz-core/src/Middleware/generic.middleware.handler')
 const _httpExport = require('xyz-core/src/Transport/Middlewares/call/http.export.middleware')
 
 function increaseTrust () {
+  logger.debug(`STOCH PING :: increasing interval`)
   let speed = 1 - (Math.abs(interval, mean) / maxInterval)
   interval = interval + (threshold * speed)
   if (interval > maxInterval) interval = maxInterval
 }
 
 function decreseTrust () {
+  logger.debug(`STOCH PING :: decreasing interval`)
   interval = interval / 2
   if (interval < minInterval) interval = minInterval
 }
@@ -28,7 +31,7 @@ let stochasticPingBoostraper = (xyz, opt = {}) => {
   mean = maxInterval - minInterval
   kick = opt.kick || 5
 
-  let logger = xyz.logger
+  logger = xyz.logger
   let CONFIG = xyz.CONFIG
   const CONSTANTS = xyz.CONSTANTS
   let wrapper = xyz.Util.wrapper
@@ -61,6 +64,7 @@ let stochasticPingBoostraper = (xyz, opt = {}) => {
   function _ping () {
     let nodes = CONFIG.getSystemConf().nodes
     const last = nodes[nodes.length - 1]
+    let failed = false
     logger.verbose(`STOCH PING :: ping cycle started. current interval: ${interval / 1000}s`)
     for (let node of nodes) {
       SR.transport.send({
@@ -80,8 +84,8 @@ let stochasticPingBoostraper = (xyz, opt = {}) => {
           // but we trust the callee 100% so we set it's availability to full
             SR.outOfReachNodes[_node] = 0
             logger.debug(`${wrapper('bold', 'PING')} success :: response = ${JSON.stringify(body)}`)
-            increaseTrust()
           } else {
+            failed = true
             if (SR.outOfReachNodes[_node]) {
               if (SR.outOfReachNodes[_node] === (kick) && SR.foreignNodes[_node]) {
                 logger.error(`STOCH PING :: removing node {${node}} from foreignNodes and nodes list`)
@@ -93,11 +97,11 @@ let stochasticPingBoostraper = (xyz, opt = {}) => {
             } else {
               SR.outOfReachNodes[_node] = 1
             }
-            decreseTrust()
             logger.error(`STOCH PING :: Error: ${_node} has been out of reach for ${SR.outOfReachNodes[_node]} pings ::  ${JSON.stringify(err)}`)
           }
 
           if (_node === last) {
+            failed ? decreseTrust() : increaseTrust()
             for (let cNode of joinCandidate) {
               SR.transport.send({node: cNode, route: routePrefix, payload: {id: _id}}, function (__node, err, body, res) {
               // this candidate has failed to prove itself

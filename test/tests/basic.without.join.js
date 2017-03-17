@@ -12,7 +12,7 @@ before(function (done) {
     processes = p
     identifiers = Object.keys(processes)
     TESTER = test.getTester()
-    setTimeout(done, 14000)
+    setTimeout(done, 10 * 1000)
   }, 'xyz.test.no.join.json')
 })
 
@@ -42,7 +42,7 @@ it('remove one of them', function (done) {
         expect(Object.keys(data.ServiceRepository.foreignServices)).to.have.lengthOf(TOTAL - 1)
         done()
       })
-    }, 50 * 1000)
+    }, 15 * 1000)
   })
 })
 

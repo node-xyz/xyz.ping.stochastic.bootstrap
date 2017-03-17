@@ -72,7 +72,7 @@ it('add a new one on the fly', function (done) {
           })
         })
       })
-    }, 25 * 1000)
+    }, 10 * 1000)
   })
 })
 
@@ -147,7 +147,7 @@ it('remove one of them', function (done) {
           })
         })
       })
-    }, 60 * 1000)
+    }, 20 * 1000)
   })
 })
 

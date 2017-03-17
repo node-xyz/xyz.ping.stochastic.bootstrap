@@ -15,7 +15,10 @@ var stringMs = new XYZ({
 })
 
 stringMs.bootstrap(require('./../../../ping.stochastic'), {
-  routePrefix: 'S_PING'
+  interval: 2000,
+  event: true,
+  maxInterval: 10 * 1000,
+  minInterval: 1 * 1000
 })
 stringMs.register('/string/down', fn.down)
 stringMs.register('/string/up', fn.up)
