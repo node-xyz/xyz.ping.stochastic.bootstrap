@@ -7,5 +7,5 @@ deploy:
   api_key:
     secure: BX12hUGJbM0VUVcHXfn2ialoZ6lem+tvMUvuQv+rC+z3jsGupuhr324lG1OpMtavrZ46by53Jsu6HuNOGG+9WeP+ArEIVCpgY+OCuXDnwvMp4+tz0J+I6yk96Ppgm0JuSQzafbOkPszEEf1cajpg8lXnYdu6NsoIt/0Yjlp+9SYIw2F+g2y49hDkFtTJw0pK9LBKy5sqopBjmeY68Qobypg3m5wVpL4vbflxuH6w/Yzt9iQc9+1XYOZPoBdkEUse4CvjvitrIcIb5lB5lO0lVXuDLfce+hTx/mOh9i+7gQZj27tI5f1DWWJKjwS/jsTFmRNYJxw2uFHpowBWqF9x86j+DCYw3rhb5a5rV63sT8anUt6rKHLUg6wMpJIdzIzT8Aq7nwFSRs3VocE8fy/B45VauSPBcz7SOArSjCgEzxgm+e4P6WY++v00+r1I7ppwxQHqifQIbmscJBnhgL7wpZMazTnvKOtT3McgVYGQcTvOuek/c+DNFzCTdgTchz9ncyuyTDcect3Dfl6x/DhS0LobNY0AG6eIuJ/T+PNGEuHIEsm6m5jbk50n17uIl+VVv4HFBIFcNpd04SgFL7ME7azRc74SXHWVz1XTskestSYuRlP+fMw5NZSj0jTjsfQuf0BAHSqLI3z2YVGLGgDbaNJHShjvaEluGZ1b8Vn3fN0=
   on:
-    repo: node-xyz/xyz.ping.stochastic.bootstrap.git
+    repo: node-xyz/xyz.ping.stochastic.bootstrap
     branch: master
