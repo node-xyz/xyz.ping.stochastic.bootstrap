@@ -14,7 +14,9 @@ var stringMs = new XYZ({
   }
 })
 
-stringMs.bootstrap(require('./../../../ping.stochastic'), true, stringMs.id().port)
+stringMs.bootstrap(require('./../../../ping.stochastic'), {
+  routePrefix: 'S_PING'
+})
 stringMs.register('/string/down', fn.down)
 stringMs.register('/string/up', fn.up)
 stringMs.register('/finger', fn.finger)
