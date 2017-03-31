@@ -73,7 +73,7 @@ npm install xyz.ping.stochastic.bootstrap
 
 In order to use this ping, the `defaultBootstrap` must be set to false
 
-```
+```javascript
 let XYZ = require('xyz-core')
 let sPing = require('xyz.ping.stochastic.bootstrap')
 
@@ -86,7 +86,7 @@ var ms new XYZ({
 
 The bootstrap function accepts the following parameters:
 
-```
+```javascript
 ms.bootstrap(sPing, {
   event: true,              
   interval: 2 * 1000,       
