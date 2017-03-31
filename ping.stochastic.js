@@ -40,13 +40,12 @@ let stochasticPingBoostraper = (xyz, opt = {}) => {
   let SR = xyz.serviceRepository
   SR.outOfReachNodes = {}
   let transport = SR.transport
-  const _id = `${xyz.id().host}:${xyz.id().port}`
 
   let joinCandidate = []
 
   let seeds = CONFIG.getSelfConf().seed
   function contactSeed (idx) {
-    transport.send({node: seeds[idx], payload: {id: _id}, route: routePrefix}, (err, body, res) => {
+    transport.send({node: seeds[idx], route: routePrefix}, (err, body, res) => {
       if (!err) {
         logger.info(`STOCH PING :: ${wrapper('bold', 'JOIN PING ACCEPTED')}. response : ${JSON.stringify(body)}`)
         for (let node of body.nodes) {
@@ -69,8 +68,7 @@ let stochasticPingBoostraper = (xyz, opt = {}) => {
     for (let node of nodes) {
       SR.transport.send({
         route: routePrefix,
-        node: node,
-        payload: {id: _id}}, function (_node, err, body, res) {
+        node: node }, function (_node, err, body, res) {
           if (err == null) {
             SR.foreignNodes[_node] = body.services
 
@@ -103,7 +101,7 @@ let stochasticPingBoostraper = (xyz, opt = {}) => {
           if (_node === last) {
             failed ? decreseTrust() : increaseTrust()
             for (let cNode of joinCandidate) {
-              SR.transport.send({node: cNode, route: routePrefix, payload: {id: _id}}, function (__node, err, body, res) {
+              SR.transport.send({node: cNode, route: routePrefix}, function (__node, err, body, res) {
               // this candidate has failed to prove itself
                 if (err) {
                   logger.error(`STOCH PING :: join candidate ${__node} rejected due to ${err}`)
@@ -121,26 +119,25 @@ let stochasticPingBoostraper = (xyz, opt = {}) => {
     }
   }
 
-  function onPingReceive (body, response) {
-    if (CONFIG.getSystemConf().nodes.indexOf(body.id) === -1) {
-      logger.warn(`STOCH PING :: new node is pinging me. adding to joinCandidate list. address : ${body.id}`)
-      joinCandidate.push(body.id)
+  function onPingReceive (sender, response) {
+    if (CONFIG.getSystemConf().nodes.indexOf(sender) === -1) {
+      logger.warn(`STOCH PING :: new node is pinging me. adding to joinCandidate list. address : ${sender}`)
+      joinCandidate.push(sender)
     }
-    logger.debug(`STOCH PING :: Responding a PING message from ${body.id}`)
+    logger.debug(`STOCH PING :: Responding a PING message from ${sender}`)
     response.end(JSON.stringify({
       services: SR.services.serializedTree,
       nodes: CONFIG.getSystemConf().nodes,
       transportServers: SR.transport.getServerRoutes()}))
   }
 
-  function _pingEvent (params, next, end, xyz) {
-    // let request = params[0]
-    let response = params[1]
-    let body = params[2]
+  function _pingEvent (xMessage, next, end, xyz) {
+    let response = xMessage.response
+    let sender = xMessage.message.xyzPayload.senderId
     let _transport = xyz.serviceRepository.transport.servers[port]
 
     logger.silly(`STOCH PING :: Passing ping to up to service repo`)
-    _transport.emit(CONSTANTS.events.PING, body, response)
+    _transport.emit(CONSTANTS.events.PING, sender, response)
     next()
   }
 
