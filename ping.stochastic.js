@@ -5,8 +5,8 @@ let mean
 let threshold = 2000
 let kick
 let logger
-const GenericMiddlewareHandler = require('xyz-core/src/Middleware/generic.middleware.handler')
-const _httpExport = require('xyz-core/src/Transport/Middlewares/call/http.export.middleware')
+const GenericMiddlewareHandler = require('xyz-core/built/Middleware/generic.middleware.handler').GenericMiddlewareHandler
+const _httpExport = require('xyz-core/built/Transport/Middlewares/http.export.middleware').default
 
 function increaseTrust () {
   logger.debug(`STOCH PING :: increasing interval`)
