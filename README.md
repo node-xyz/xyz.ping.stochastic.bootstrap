@@ -1,6 +1,7 @@
 # xyz.ping.stochastic.bootstrap
 
 [![Build Status](https://travis-ci.org/node-xyz/xyz.ping.stochastic.bootstrap.svg?branch=master)](https://travis-ci.org/node-xyz/xyz.ping.stochastic.bootstrap) [![npm version](https://badge.fury.io/js/xyz.ping.stochastic.bootstrap.svg)](https://badge.fury.io/js/xyz.ping.stochastic.bootstrap)
+[![dependencies Status](https://david-dm.org/node-xyz/xyz.ping.stochastic.bootstrap/status.svg)](https://david-dm.org/node-xyz/xyz.ping.stochastic.bootstrap)
 
 ---
 
